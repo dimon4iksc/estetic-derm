@@ -1,0 +1,26 @@
+# Для звичайного (Apache) хостингу
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+RewriteEngine On
+# Один адрес сайту: https без www
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+# === 301-РЕДИРЕКТИ СО СТАРОГО САЙТУ (ВАЖЛИВО ДЛЯ SEO) ===
+# Для кожної старої адреси, що отримує трафік з Google, додайте рядок без #:
+# Redirect 301 /stara-storinka.html /dermatologiya/
+# Redirect 301 /stari-posluhy /kosmetologiya/
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
